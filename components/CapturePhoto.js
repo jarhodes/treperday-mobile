@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { Camera } from 'expo-camera';
-import { Button, Overlay } from 'react-native-elements';
+import { Button, Icon, Overlay } from 'react-native-elements';
 import ApiContext from '../ApiContext';
 import { useNavigation } from '@react-navigation/native';
+import * as mime from 'react-native-mime-types';
 
 export default function CapturePhoto(props) {
 
@@ -41,7 +42,7 @@ export default function CapturePhoto(props) {
         data.append('file', {
             uri: photo.uri,
             name: filename,
-            type: 'image/jpg'
+            type: mime.lookup(photo.uri) || 'application/octet-stream'
         });
         console.log(data);
         fetch(apiVariables.apiUrl + "/api/attachment/addtoperformance/" + props.route.params.performanceId, {
@@ -72,18 +73,19 @@ export default function CapturePhoto(props) {
             { hasCameraPermission ? (
                 <>
                     <Camera style={styles.camera} ref={camera} type={type}>
-                    <View style={styles.inlineButtons}>
-                        <Button title="Take photo" onPress={capture} />
-                        <Button title="Flip" onPress={flipCamera} />
+                    <View style={styles.cameraControls}>
+                        <Icon name="flip" size={24} reverse color="blue" onPress={() => capture()} />
+                        <Icon name="camera" size={24} reverse color="red" onPress={() => capture()} />
                     </View>
                     </Camera>
                     <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay} fullScreen={true}>
                         <View style={{ flex: 1 }}>
-                            <Image style={{ flex: 12, width: null }} source={{ uri: `data:image/jpg;base64,${photo.base64}` }} />
-                            <View style={styles.inlineButtons}>
-                                <Button title="No" onPress={toggleOverlay} />
-                                <Button title="Yes" onPress={putPhoto} />
-                            </View>
+                            <ImageBackground source={{ uri: `data:image/jpg;base64,${photo.base64}` }} style={styles.confirmImage}>
+                                <View style={styles.inlineButtons}>
+                                    <Icon name="check" size={24} reverse color="green" onPress={() => putPhoto()} />
+                                    <Icon name="cancel" size={24} reverse color="red" onPress={() => toggleOverlay()} />
+                                </View>
+                            </ImageBackground>
                         </View>
                     </Overlay>
                 </>
@@ -102,11 +104,24 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row'
     },
+    cameraControls:  {
+        alignSelf: 'flex-end',
+        flexDirection: 'row',
+        padding: 0,
+        marginVertical: 40        
+    },
     inlineButtons: {
         alignSelf: 'flex-end',
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 0,
         marginVertical: 40
+    },
+    confirmImage: {
+        height: '100%',
+        width: null,
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
     }
 });

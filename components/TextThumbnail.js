@@ -10,19 +10,25 @@ export default function TextThumbnail(props) {
         setOverlayVisible(!overlayVisible);
     }
 
-    return (
-        <>
-            <Icon name="subject" size={15} reverse onPress={toggleOverlay} />
-            <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}>
-                <View>
-                    <Text>{props.performance.performanceText}</Text>
-                    <View style={styles.inlineButtons}>
-                        <Button title="Close" onPress={toggleOverlay} />
+    if (props.performance.performanceText) {
+        return (
+            <>
+                <Icon name="subject" size={15} reverse onPress={toggleOverlay} />
+                <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}>
+                    <View>
+                        <Text>{props.performance.performanceText}</Text>
+                        <View style={styles.inlineButtons}>
+                            <Button title="Close" onPress={toggleOverlay} />
+                        </View>
                     </View>
-                </View>
-            </Overlay>
-        </>
-    );
+                </Overlay>
+            </>
+        );
+    }
+    else {
+        return (<></>);
+    }
+
 }
 
 const styles = StyleSheet.create({

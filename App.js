@@ -53,7 +53,15 @@ export default function App() {
                         key: apiVariables.apiKey
                     })
                 })
-                .then(response => response.json())
+                .then(response => response.text())
+                .then(responseText => {
+                    if (responseText.length) {
+                        return JSON.parse(responseText);
+                    }
+                    else {
+                        return Promise.reject("Empty string returned by "+apiVariables.apiUrl+"/api/user/create");
+                    }
+                })
                 .then(async (responseJson) => {
                     try {
                         await AsyncStorage.setItem("user", JSON.stringify(responseJson));
@@ -74,17 +82,30 @@ export default function App() {
     }
 
     const fetchUserDetails = (userJson) => {
+        console.log("Fetching user details");
         const headers = authorizationHeaders(userJson);
         fetch(apiVariables.apiUrl + "/api/user/details", {
             headers: headers
         })
-            .then(response => response.json())
+            .then(response => response.text())
+            .then(responseText => {
+                if (responseText.length) {
+                    console.log("Received: "+responseText);
+                    return JSON.parse(responseText);
+                }
+                else {
+                    return Promise.reject("Empty string returned by "+apiVariables.apiUrl + "/api/user/details");
+                }
+            })
             .then(responseJson => {
                 setUser({ username: userJson.username, password: userJson.password, firstName: responseJson.firstName, lastName: responseJson.lastName });
                 setUserOk(true);
                 console.log(JSON.stringify(responseJson));
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error);
+                createUser();
+            });
     }
 
     React.useEffect(() => {
