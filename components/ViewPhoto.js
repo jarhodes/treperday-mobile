@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
-import { Button, Overlay } from 'react-native-elements';
+import { Button, Icon, Overlay } from 'react-native-elements';
 import ApiContext from '../ApiContext';
 
 export default function ViewPhoto(props) {
@@ -52,7 +52,7 @@ export default function ViewPhoto(props) {
         <ImageBackground source={source} style={styles.mainImage}>
             { belongsToPrincipal ? (
                 <>
-                    <Button title="Delete" onPress={toggleOverlay} />
+                    <Icon name="delete" size={24} reverse color="darkred" onPress={toggleOverlay} />
                     <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}>
                         <View>
                             <Text>Do you really want to delete this photo?</Text>

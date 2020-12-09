@@ -12,7 +12,7 @@ import { StyleSheet, View } from 'react-native';
 
 const Stack = createStackNavigator();
 
-export default function StackNav({ navigation }) {
+export default function HistoryNav({ navigation }) {
 
     const hamburgerMenu = () => (
         <View style={styles.hamburger}>
@@ -22,9 +22,9 @@ export default function StackNav({ navigation }) {
 
     return (
             <Stack.Navigator>
-                <Stack.Screen name="TaskScreen" component={TaskScreen} options={{ headerTitle: 'Activities',
-            headerLeft: hamburgerMenu }} />
                 <Stack.Screen name="TaskHistory" component={TaskHistory} options={{ headerTitle: 'Your activities',
+            headerLeft: hamburgerMenu }} />
+                <Stack.Screen name="TaskScreen" component={TaskScreen} options={{ headerTitle: 'Activities',
             headerLeft: hamburgerMenu }} />
                 <Stack.Screen name="Activity" component={Performance} />
                 <Stack.Screen name="CapturePhoto" component={CapturePhoto} options={{ title: 'Take photo' }} />

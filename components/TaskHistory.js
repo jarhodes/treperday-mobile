@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import ApiContext from '../ApiContext';
 import { useNavigation } from '@react-navigation/native';
@@ -33,7 +33,7 @@ export default function TaskHistory(props) {
     }, []);
 
     return (
-        <View>
+        <ScrollView>
             { dates ? dates.map((item, key) => 
                 <ListItem key={key} bottomDivider onPress={() => navigation.push("TaskScreen", { date: item.date })}>
                     <ListItem.Content>
@@ -51,7 +51,7 @@ export default function TaskHistory(props) {
                     <ListItem.Chevron />
                 </ListItem>
              ) }
-        </View>
+        </ScrollView>
     );
 }
 

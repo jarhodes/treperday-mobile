@@ -12,7 +12,6 @@ import { Avatar, Icon, Text } from 'react-native-elements';
 import ProfileNav from './ProfileNav.js';
 import StatsNav from './StatsNav.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import HistoryNav from './HistoryNav.js';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();

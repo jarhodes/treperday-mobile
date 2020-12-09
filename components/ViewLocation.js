@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { Button, Overlay, Text } from 'react-native-elements';
+import { Button, Icon, Overlay, Text } from 'react-native-elements';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import ApiContext from '../ApiContext';
 
@@ -106,7 +106,7 @@ export default function ViewLocation(props) {
                     </MapView>
                     { belongsToPrincipal ? (
                         <View style={styles.deleteContainer}>
-                            <Button title="Delete this location" onPress={toggleOverlay} />
+                            <Icon name="delete" size={24} reverse color="darkred" onPress={toggleOverlay} />
                             <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}>
                                 <View>
                                     <Text>Do you really want to delete this location?</Text>

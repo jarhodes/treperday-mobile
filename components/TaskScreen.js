@@ -76,10 +76,6 @@ export default function TaskScreen(props) {
             initiateTasks();
         }, [])
     );
-    /*
-    React.useEffect(() => {
-        initiateTasks();
-    }, []);*/
 
     return (
         <ScrollView style={{flex: 1}}>

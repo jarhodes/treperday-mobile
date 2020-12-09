@@ -13,6 +13,7 @@ export default function CapturePhoto(props) {
     const [type, setType] = React.useState(Camera.Constants.Type.back);
     const [photo, setPhoto] = React.useState({});
     const [overlayVisible, setOverlayVisible] = React.useState(false);
+    const [saveOverlayVisible, setSaveOverlayVisible] = React.useState(false);
     const navigation = useNavigation();
     
     const toggleOverlay = () => {
@@ -23,9 +24,11 @@ export default function CapturePhoto(props) {
 
     const capture = async () => {
         if (camera) {
+            setSaveOverlayVisible(true);
             const capturedPhoto = await camera.current.takePictureAsync({ base64: true });
             setPhoto(capturedPhoto);
             toggleOverlay();
+            setSaveOverlayVisible(false);
         }
     }
 
@@ -36,6 +39,7 @@ export default function CapturePhoto(props) {
     }
 
     const putPhoto = async () => {
+        setSaveOverlayVisible(true);
         console.log("Posting photo to performance ID = " + props.route.params.performanceId);
         const filename = photo.uri.split('/').pop();
         const data = new FormData();
@@ -54,6 +58,7 @@ export default function CapturePhoto(props) {
                     navigation.goBack();
                 }
                 else {
+                    setSaveOverlayVisible(false);
                     toggleOverlay();
                     return Promise.reject("Status: " + response.status + " " + JSON.stringify(response.json()));
                 }
@@ -72,7 +77,7 @@ export default function CapturePhoto(props) {
         <View style={styles.cameraContainer}>
             { hasCameraPermission ? (
                 <>
-                    <Camera style={styles.camera} ref={camera} type={type}>
+                    <Camera style={styles.camera} ref={camera} type={type} useCamera2Api={true}>
                     <View style={styles.cameraControls}>
                         <Icon name="switch-camera" type="materialicons" size={24} reverse color="darkblue" onPress={() => flipCamera()} />
                         <Icon name="camera" size={24} reverse color="darkred" onPress={() => capture()} />
@@ -87,6 +92,9 @@ export default function CapturePhoto(props) {
                                 </View>
                             </ImageBackground>
                         </View>
+                    </Overlay>
+                    <Overlay isVisible={saveOverlayVisible}>
+                        <ActivityIndicator size="large" color="#555" />
                     </Overlay>
                 </>
             ) : (
