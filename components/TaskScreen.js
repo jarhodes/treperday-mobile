@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, ListItem } from 'react-native-elements';
 import ApiContext from '../ApiContext';
 import Task from './Task';
@@ -82,7 +82,7 @@ export default function TaskScreen(props) {
     }, []);*/
 
     return (
-        <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1}}>
             <ListItem bottomDivider onPress={() => navigation.navigate("TaskHistory")}>
                 <ListItem.Content>
                     <ListItem.Title>Choose a different date</ListItem.Title>
@@ -98,7 +98,7 @@ export default function TaskScreen(props) {
                     </View>
                 )}
             </View>
-        </View>
+        </ScrollView>
     );
 }
 

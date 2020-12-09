@@ -12,13 +12,20 @@ export default function LocationThumbnails(props) {
 
     const fetchLocationList = (performanceId) => {
         fetch(apiVariables.apiUrl + "/api/location/list/" + performanceId)
-            .then(response => response.text())
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                else {
+                    return Promise.reject("Status: " + response.status + " " + JSON.stringify(response.json()));
+                }
+            })
             .then(responseText => {
                 if (responseText.length) {
                     return JSON.parse(responseText);
                 }
                 else {
-                    return Promise.reject("Status: " + response.status + " " + JSON.stringify(response.json()));
+                    return Promise.reject("Empty response");
                 }
             })
             .then(responseJson => {

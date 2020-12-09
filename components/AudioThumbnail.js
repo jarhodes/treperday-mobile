@@ -64,7 +64,7 @@ export default function AudioThumbnail(props) {
             <Icon name="play-arrow" size={15} reverse onPress={playSound} />
             { belongsToPrincipal ? (
                 <>
-                    <Icon name="delete" size={15} reverse color="red" onPress={toggleOverlay} />
+                    <Icon name="delete" size={15} reverse color="darkred" onPress={toggleOverlay} />
                     <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay}>
                         <View>
                             <Text>Do you really want to delete this?</Text>

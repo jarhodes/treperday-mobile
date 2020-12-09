@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import { Camera } from 'expo-camera';
-import { Button, Icon, Overlay } from 'react-native-elements';
+import { Icon, Overlay } from 'react-native-elements';
 import ApiContext from '../ApiContext';
 import { useNavigation } from '@react-navigation/native';
 import * as mime from 'react-native-mime-types';
@@ -74,16 +74,16 @@ export default function CapturePhoto(props) {
                 <>
                     <Camera style={styles.camera} ref={camera} type={type}>
                     <View style={styles.cameraControls}>
-                        <Icon name="flip" size={24} reverse color="blue" onPress={() => capture()} />
-                        <Icon name="camera" size={24} reverse color="red" onPress={() => capture()} />
+                        <Icon name="switch-camera" type="materialicons" size={24} reverse color="darkblue" onPress={() => flipCamera()} />
+                        <Icon name="camera" size={24} reverse color="darkred" onPress={() => capture()} />
                     </View>
                     </Camera>
                     <Overlay isVisible={overlayVisible} onBackdropPress={toggleOverlay} fullScreen={true}>
                         <View style={{ flex: 1 }}>
                             <ImageBackground source={{ uri: `data:image/jpg;base64,${photo.base64}` }} style={styles.confirmImage}>
                                 <View style={styles.inlineButtons}>
-                                    <Icon name="check" size={24} reverse color="green" onPress={() => putPhoto()} />
-                                    <Icon name="cancel" size={24} reverse color="red" onPress={() => toggleOverlay()} />
+                                    <Icon name="check" size={24} reverse color="darkgreen" onPress={() => putPhoto()} />
+                                    <Icon name="cancel" size={24} reverse color="darkred" onPress={() => toggleOverlay()} />
                                 </View>
                             </ImageBackground>
                         </View>

@@ -26,7 +26,14 @@ export default function CommunityThumbnails(props) {
         }
 
         fetch(uri)
-            .then(response => response.text())
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                else {
+                    return Promise.reject("Not ok");
+                }
+            })
             .then(responseText => {
                 if (responseText.length) {
                     return JSON.parse(responseText);

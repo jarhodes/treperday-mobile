@@ -1,7 +1,7 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { ImageBackground, Linking, StyleSheet, Switch, View } from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { Button, Icon, Text } from 'react-native-elements';
 import ApiContext from '../ApiContext';
 import AudioSubmission from './AudioSubmission';
 import LocationSubmission from './LocationSubmission';
@@ -120,12 +120,15 @@ export default function Performance(props) {
                         }[performance.task.category.submissionType]
                         || <TextSubmission style={styles.detailText} performance={performance} setPerformance={setPerformance} />
                     }
-                    <Button style={styles.containerMargin} title="Need inspiration?" onPress={() => Linking.openURL(performance.task.helpLink)} />
+                    <View style={styles.detailText}>
+                        <Button style={styles.detailText} title="Need inspiration?" onPress={() => Linking.openURL(performance.task.helpLink)} />
+                    </View>
+                    
                     <View style={styles.switchHolder}>
                         <Text>Share this with other TrePerDay users</Text>
                         <Switch value={performance.isShared} onValueChange={() => setPerformance({...performance, isShared: !performance.isShared})} />
                     </View>
-                    <Button title="Save my activity" onPress={() => putPerformance()} />
+                    <Icon name="check" size={24} reverse color="darkgreen" onPress={() => putPerformance()} />
                 </View> ) : ( 
             <></> ) }
      </View>);
@@ -146,7 +149,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch'
     },
     overlay: {
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         padding: 10
     },
     containerMargin: {

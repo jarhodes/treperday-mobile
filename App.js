@@ -1,19 +1,20 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import TaskScreen from './components/TaskScreen.js';
-import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Performance from './components/Performance.js';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
 import ApiContext from './ApiContext.js';
 import ApiState from './ApiState.js';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import CapturePhoto from './components/CapturePhoto.js';
-import ViewPhoto from './components/ViewPhoto.js';
-import UserLocation from './components/UserLocation.js';
-import ViewLocation from './components/ViewLocation.js';
-import TaskHistory from './components/TaskHistory.js';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, View } from 'react-native';
+import StackNav from './StackNav.js';
+import Profile from './components/Profile.js';
+import { Avatar, Icon, Text } from 'react-native-elements';
+import ProfileNav from './ProfileNav.js';
+import StatsNav from './StatsNav.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
 
@@ -98,7 +99,8 @@ export default function App() {
                 }
             })
             .then(responseJson => {
-                setUser({ username: userJson.username, password: userJson.password, firstName: responseJson.firstName, lastName: responseJson.lastName });
+                setUser({ username: userJson.username, password: userJson.password, firstName: responseJson.firstName, 
+                    lastName: responseJson.lastName, avatarIcon: responseJson.avatarIcon, avatarColour: responseJson.avatarColour });
                 setUserOk(true);
                 console.log(JSON.stringify(responseJson));
             })
@@ -117,15 +119,17 @@ export default function App() {
             { userOk ? (
                 <ApiState user={user} authHeaders={authorizationHeaders(user)}>
                     <NavigationContainer>
-                        <Stack.Navigator>
-                            <Stack.Screen name="TaskScreen" component={TaskScreen} options={{ title: 'Activities' }} />
-                            <Stack.Screen name="TaskHistory" component={TaskHistory} options={{ title: 'Your activities' }} />
-                            <Stack.Screen name="Activity" component={Performance} />
-                            <Stack.Screen name="CapturePhoto" component={CapturePhoto} options={{ title: 'Take photo' }} />
-                            <Stack.Screen name="ViewPhoto" component={ViewPhoto} options={{ title: 'Photo' }} />
-                            <Stack.Screen name="UserLocation" component={UserLocation} options={{ title: 'Map' }} />
-                            <Stack.Screen name="ViewLocation" component={ViewLocation} options={{ title: 'Map' }} />
-                        </Stack.Navigator>
+                        <Drawer.Navigator initialRouteName="Activities" drawerContentOptions={{ itemStyle: { marginVertical: 5 } }} drawerContent={(props) => (
+                            <SafeAreaView style={{flex: 1}}>
+                                <Image source={require("./assets/text12.png")} style={styles.sideMenuProfileIcon} />
+                                <DrawerContentScrollView {...props}>
+                                    <DrawerItemList {...props} />
+                                </DrawerContentScrollView>
+                            </SafeAreaView>)}>
+                            <Drawer.Screen name="Profile" component={ProfileNav} />
+                            <Drawer.Screen name="Activities" component={StackNav} />
+                            <Drawer.Screen name="Statistics" component={StatsNav} />
+                        </Drawer.Navigator>
                     </NavigationContainer>
                 </ApiState>
             ) : (
@@ -148,5 +152,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         padding: 10
-    }
+    },
+    sideMenuProfileIcon: {
+        resizeMode: "center",
+        width: 110,
+        height: 141,
+        alignSelf: 'center',
+      },
 })
